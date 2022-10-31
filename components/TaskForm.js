@@ -1,3 +1,4 @@
+import { calculateOverrideValues } from "next/dist/server/font-utils";
 import { useState } from "react";
 
 const TaskForm = ({ onClick }) => {
@@ -6,6 +7,13 @@ const TaskForm = ({ onClick }) => {
     const [desc, setDesc] = useState("");
     const [completed, setCompleted] = useState(false);
     const [error, setError] = useState(false);
+
+    const clearValue = () => {
+        setTask("");
+        setDesc("");
+        setCompleted(false);
+        setError(false);
+    }
 
     return (
         <div className="modal" id="task-form">
@@ -38,15 +46,12 @@ const TaskForm = ({ onClick }) => {
                             } else {
                                 onClick(task, desc, completed)
                             }
-
+                            clearValue();
                         }}
                         className="btn btn-success">Create</a>
                     <a href="#" className="btn btn-error"
                         onClick={() => {
-                            setTask("");
-                            setDesc("");
-                            setCompleted(false);
-                            setError(false);
+                            clearValue();
                         }}>Cancel</a>
                 </div>
             </div>
