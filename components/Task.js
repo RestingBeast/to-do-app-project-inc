@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { useState } from "react";
 
-const Task = ({ task, onChange }) => {
+const Task = ({ task, onChange, onDelete }) => {
   const date = new DateTime(task.created_at);
   const [checked, setChecked] = useState(task.status === 0 ? false : true);
   const onChangeHandler = () => {
@@ -23,7 +23,11 @@ const Task = ({ task, onChange }) => {
         <p>Created At: {date.toFormat("MMMM dd yyyy hh:mm a")}</p>
         <p>{task.description}</p>
         <div className="card-actions justify-center">
-          <button className="btn btn-error">Delete</button>
+          <button
+            onClick={() => {
+              onDelete(task.id);
+            }}
+            className="btn btn-error">Delete</button>
         </div>
       </div>
     </div>

@@ -1,19 +1,57 @@
-const TaskForm = ({ onSubmit }) => (
-    <div className="modal" id="task-form">
-        <div className="modal-box">
-            <h3 className="font-bold text-lg">Create New Task</h3>
-            <form onSubmit={onSubmit}>
-                <input type="text" placeholder="Name" className="input w-full mx-1 my-3" />
-                <input type="text" placeholder="Description" className="input w-full mx-1 my-3" />
+import { useState } from "react";
+
+const TaskForm = ({ onClick }) => {
+
+    const [task, setTask] = useState("");
+    const [desc, setDesc] = useState("");
+    const [completed, setCompleted] = useState(false);
+    const [error, setError] = useState(false);
+
+    return (
+        <div className="modal" id="task-form">
+            <div className="modal-box">
+                <h3 className="font-bold text-lg">Create New Task</h3>
+                <input type="text"
+                    className="input w-full mx-1 my-3"
+                    value={task}
+                    placeholder="name"
+                    onChange={(e) => { setTask(e.target.value) }}
+                />
+                <input type="text"
+                    className="input w-full mx-1 my-3"
+                    value={desc}
+                    placeholder="description"
+                    onChange={(e) => { setDesc(e.target.value) }}
+                />
                 <span className="m-4 my-8 label-text">Completed?</span>
-                <input type="checkbox" className="ml-4 checkbox checkbox-success align-middle" />
+                <input type="checkbox"
+                    checked={completed}
+                    className="ml-4 checkbox checkbox-success align-middle"
+                    onChange={() => { setCompleted(!completed) }}
+                />
+                {error ? <p className="text-error">Task Name cannot be empty</p> : ""}
                 <div className="modal-action justify-center">
-                    <a href="#"><button className="btn btn-success">Create</button></a>
-                    <a href="#" className="btn btn-error">Cancel</a>
+                    <a href="#"
+                        onClick={() => {
+                            if (task === "" || task === null) {
+                                setError(true);
+                            } else {
+                                onClick(task, desc, completed)
+                            }
+
+                        }}
+                        className="btn btn-success">Create</a>
+                    <a href="#" className="btn btn-error"
+                        onClick={() => {
+                            setTask("");
+                            setDesc("");
+                            setCompleted(false);
+                            setError(false);
+                        }}>Cancel</a>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
-)
+    )
+}
 
 export default TaskForm;
