@@ -5,7 +5,11 @@ const Navbar = ({ deleteAll }) => (
         </div>
         <div className="flex-none">
             <a href="#task-form" className="btn btn-primary mr-4">Create New Task</a>
-            <button className='btn btn-secondary' onClick={() => (deleteAll())}>Delete Completed Tasks</button>
+            <a href="#confirm-modal"
+                className='btn btn-secondary'
+            >
+                Delete Completed Tasks
+            </a>
         </div>
     </div>
 )

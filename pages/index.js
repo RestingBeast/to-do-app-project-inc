@@ -1,16 +1,11 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
+import ConfirmMoadal from '../components/ConfirmModal';
 import Navbar from '../components/Navbar';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList'
 import { supabaseClient } from '../lib/client';
 
-const task1 = {
-  name: "Sample Task",
-  description: "Sample Description",
-  status: 1,
-  created_at: "Monday",
-};
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
@@ -19,32 +14,32 @@ export default function Home() {
   }, [])
   async function fetchTodos() {
     const { data } = await supabaseClient.from('tasks').select();
-    console.log(data);
     setTodos(data);
   }
   async function changeStatus(status, id) {
-    console.log(status, id);
     const { error } = await supabaseClient.from('tasks').update({ status: status ? 1 : 0 }).eq('id', id);
-    console.log(error);
   }
   async function createTodo(task, desc, status) {
     if (task === "" || task === null)
       return;
     const { error } = await supabaseClient
       .from('tasks')
-      .insert({ name: task, description: desc, status: status ? 1 : 0 })
+      .insert({ name: task, description: desc, status: status ? 1 : 0 });
+    fetchTodos();
   }
   async function deleteTodo(id) {
     const { error } = await supabaseClient
       .from('tasks')
       .delete()
-      .eq('id', id)
+      .eq('id', id);
+    fetchTodos();
   }
   async function deleteCompletedTodos() {
     const { error } = await supabaseClient
       .from('tasks')
       .delete()
-      .eq('status', 1)
+      .eq('status', 1);
+    fetchTodos();
   }
   return (
     <div>
@@ -56,6 +51,7 @@ export default function Home() {
       <Navbar deleteAll={deleteCompletedTodos} />
       <TaskList tasks={todos} onChange={changeStatus} onDelete={deleteTodo} />
       <TaskForm onClick={createTodo} />
+      <ConfirmMoadal onClick={deleteCompletedTodos} />
     </div>
   )
 }
